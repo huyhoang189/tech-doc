@@ -14,6 +14,7 @@ import {
   Card,
   Space,
   Typography,
+  Upload,
 } from "antd";
 import {
   getDevices,
@@ -26,11 +27,13 @@ import { createModel, deleteModel } from "../services/modelService";
 import {
   createDocument,
   deleteDocument,
+  downloadDocument,
 } from "../services/technicalDocumentService";
 import { getSystemById } from "../services/systemService";
+import { UploadOutlined } from "@ant-design/icons";
 
 const DevicePage = () => {
-  const { systemId } = useParams(); // Lấy systemId từ URL
+  const { systemId } = useParams();
   const navigate = useNavigate();
   const [devices, setDevices] = useState([]);
   const [system, setSystem] = useState({});
@@ -40,7 +43,6 @@ const DevicePage = () => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [deviceForm] = Form.useForm();
   const [modelForm] = Form.useForm();
-  const [documentForm] = Form.useForm();
 
   const fetchDevices = async () => {
     try {
@@ -50,6 +52,7 @@ const DevicePage = () => {
       message.error("Không thể tải danh sách thiết bị");
     }
   };
+
   const fetchDetailSystem = async () => {
     try {
       const data = await getSystemById(systemId);
@@ -153,16 +156,10 @@ const DevicePage = () => {
     setIsDocumentDrawerVisible(true);
   };
 
-  const handleAddDocument = async () => {
+  const handleAddDocument = async (file) => {
     try {
-      const values = await documentForm.validateFields();
-      const documentData = {
-        deviceId: selectedDevice.id,
-        path: values.newDocumentPath,
-      };
-      await createDocument(documentData);
+      await createDocument(selectedDevice.id, file);
       message.success("Thêm tài liệu kỹ thuật thành công");
-      documentForm.resetFields();
       await refreshSelectedDevice(selectedDevice.id);
       fetchDevices();
     } catch (error) {
@@ -178,6 +175,19 @@ const DevicePage = () => {
       fetchDevices();
     } catch (error) {
       message.error("Không thể xóa tài liệu kỹ thuật");
+    }
+  };
+
+  const handleDownloadDocument = async (id) => {
+    try {
+      const fileBlob = await downloadDocument(id);
+      const url = window.URL.createObjectURL(
+        new Blob([fileBlob], { type: "application/pdf" })
+      );
+      window.open(url, "_blank"); // Mở file PDF trong tab mới
+      window.URL.revokeObjectURL(url); // Giải phóng URL sau khi mở
+    } catch (error) {
+      message.error("Không thể hiển thị tài liệu kỹ thuật");
     }
   };
 
@@ -220,8 +230,14 @@ const DevicePage = () => {
         return (
           <Flex gap={10} vertical>
             {record?.documents?.map((e) => (
-              <a href={e?.path} target="_blank" key={e.id}>
-                {e?.path}
+              <a
+                key={e.id}
+                onClick={() =>
+                  handleDownloadDocument(e.id, e.path.split("/").pop())
+                }
+                style={{ cursor: "pointer" }}
+              >
+                {e.path.split("/").pop()}
               </a>
             ))}
           </Flex>
@@ -273,7 +289,6 @@ const DevicePage = () => {
       }}
     >
       <Card
-        // title={`Danh sách thiết bị của hệ thống ${systemId}`}
         extra={
           <Space>
             <Button type="default" onClick={() => navigate("/")}>
@@ -382,6 +397,14 @@ const DevicePage = () => {
               actions={[
                 <Button
                   type="link"
+                  onClick={() =>
+                    handleDownloadDocument(doc.id, doc.path.split("/").pop())
+                  }
+                >
+                  Tải về
+                </Button>,
+                <Button
+                  type="link"
                   danger
                   onClick={() => handleDeleteDocument(doc.id)}
                 >
@@ -389,27 +412,20 @@ const DevicePage = () => {
                 </Button>,
               ]}
             >
-              {doc.path}
+              {doc.path.split("/").pop()}
             </List.Item>
           )}
         />
-        <Form form={documentForm} layout="vertical">
-          <Form.Item
-            name="newDocumentPath"
-            label="Thêm đường dẫn tài liệu kỹ thuật mới"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập đường dẫn tài liệu kỹ thuật!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Button type="primary" onClick={handleAddDocument}>
-            Thêm tài liệu kỹ thuật
-          </Button>
-        </Form>
+        <Upload
+          accept="application/pdf"
+          beforeUpload={(file) => {
+            handleAddDocument(file);
+            return false; // Ngăn upload tự động của Ant Design
+          }}
+          showUploadList={false}
+        >
+          <Button icon={<UploadOutlined />}>Upload PDF</Button>
+        </Upload>
       </Drawer>
     </div>
   );

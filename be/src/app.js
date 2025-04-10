@@ -29,6 +29,9 @@ app.use("/api/devices", deviceRoutes);
 app.use("/api/models", modelRoutes);
 app.use("/api/documents", technicalDocumentRoutes);
 
+// Phục vụ file tĩnh từ thư mục storage
+app.use("/storage", express.static("storage"));
+
 // Error Handler
 app.use(errorHandler);
 
