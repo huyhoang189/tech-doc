@@ -22,18 +22,6 @@ const getDocument = async (req, res, next) => {
   }
 };
 
-const updateDocument = async (req, res, next) => {
-  try {
-    const document = await technicalDocumentService.updateDocument(
-      req.params.id,
-      req.body
-    );
-    res.json(document);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const deleteDocument = async (req, res, next) => {
   try {
     await technicalDocumentService.deleteDocument(req.params.id);
@@ -55,7 +43,6 @@ const getAllDocuments = async (req, res, next) => {
 module.exports = {
   createDocument,
   getDocument,
-  updateDocument,
   deleteDocument,
   getAllDocuments,
 };

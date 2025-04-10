@@ -1,7 +1,8 @@
 const prisma = require("../config/database");
 
 const createDevice = async (deviceData) => {
-  return prisma.devices.create({
+  console.log(deviceData);
+  return prisma.Device.create({
     data: {
       deviceName: deviceData.deviceName,
     },
@@ -9,28 +10,34 @@ const createDevice = async (deviceData) => {
 };
 
 const getDeviceById = async (id) => {
-  return prisma.devices.findUnique({
+  return prisma.Device.findUnique({
     where: { id: parseInt(id) },
-    include: { technical_documents: true },
+    include: {
+      documents: true,
+      models: true,
+    },
   });
 };
 
 const updateDevice = async (id, deviceData) => {
-  return prisma.devices.update({
+  return prisma.Device.update({
     where: { id: parseInt(id) },
     data: { deviceName: deviceData.deviceName },
   });
 };
 
 const deleteDevice = async (id) => {
-  return prisma.devices.delete({
+  return prisma.Device.delete({
     where: { id: parseInt(id) },
   });
 };
 
 const getAllDevices = async () => {
-  return prisma.devices.findMany({
-    include: { technical_documents: true },
+  return prisma.Device.findMany({
+    include: {
+      documents: true,
+      models: true,
+    },
   });
 };
 
