@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model System {
+  id          Int      @id @default(autoincrement())
+  description String   @map("description")
+  unit        String   @map("unit")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  devices     Device[] @relation("SystemDevices")
+  @@map("systems")
+}
+
+model Device {
+  id          Int               @id @default(autoincrement())
+  deviceName  String            @map("device_name")
+  systemId    Int               @map("system_id")
+  system      System            @relation("SystemDevices", fields: [systemId], references: [id], onDelete: Cascade)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  documents   TechnicalDocument[] @relation("DeviceDocuments")
+  models      Model[]           @relation("DeviceModels")
+  @@map("devices")
+}
+
+model TechnicalDocument {
+  id           Int      @id @default(autoincrement())
+  deviceId     Int      @map("device_id")
+  path         String   @map("path")
+  lastUpdated  DateTime @updatedAt @map("last_updated")
+  createdAt    DateTime @default(now()) @map("created_at")
+  device       Device   @relation("DeviceDocuments", fields: [deviceId], references: [id], onDelete: Cascade)
+  @@index([deviceId])
+  @@map("technical_documents")
+}
+
+model Model {
+  id          Int      @id @default(autoincrement())
+  deviceId    Int      @map("device_id")
+  path        String   @map("path")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  device      Device   @relation("DeviceModels", fields: [deviceId], references: [id], onDelete: Cascade)
+  @@map("models")
+}
