@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const deviceRoutes = require("./routers/deviceRoutes");
 const modelRoutes = require("./routers/modelRoutes");
 const technicalDocumentRoutes = require("./routers/technicalDocumentRoutes");
+const systemController = require("./routers/systemRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(
 app.use(cors());
 
 // Routes
+app.use("/api/systems", systemController);
 app.use("/api/devices", deviceRoutes);
 app.use("/api/models", modelRoutes);
 app.use("/api/documents", technicalDocumentRoutes);

@@ -39,7 +39,8 @@ const deleteDevice = async (req, res, next) => {
 
 const getAllDevices = async (req, res, next) => {
   try {
-    const devices = await deviceService.getAllDevices();
+    const systemId = req.query.systemId ? parseInt(req.query.systemId) : null;
+    const devices = await deviceService.getDevices(systemId);
     res.json(devices);
   } catch (error) {
     next(error);
