@@ -36,8 +36,7 @@ const deleteDocument = async (req, res, next) => {
   }
 };
 
-// API để tải file về
-const downloadDocument = async (req, res, next) => {
+const displayDocument = async (req, res, next) => {
   try {
     const document = await technicalDocumentService.getDocumentById(
       req.params.id
@@ -51,7 +50,8 @@ const downloadDocument = async (req, res, next) => {
       return res.status(404).json({ message: "File không tồn tại" });
     }
 
-    res.download(filePath, path.basename(filePath));
+    res.setHeader("Content-Type", "application/pdf");
+    res.sendFile(filePath);
   } catch (error) {
     next(error);
   }
@@ -60,5 +60,5 @@ const downloadDocument = async (req, res, next) => {
 module.exports = {
   createDocument,
   deleteDocument,
-  downloadDocument,
+  displayDocument,
 };

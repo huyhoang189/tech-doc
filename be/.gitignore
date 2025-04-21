@@ -1,4 +1,6 @@
 node_modules/
 .env
 prisma/migrations
-storage/
+storage/documents/*
+storage/models/*
+storage/videos/*

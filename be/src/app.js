@@ -5,13 +5,17 @@ const morgan = require("morgan");
 
 const deviceRoutes = require("./routers/deviceRoutes");
 const modelRoutes = require("./routers/modelRoutes");
+const videoRouters = require("./routers/videoRouters");
 const technicalDocumentRoutes = require("./routers/technicalDocumentRoutes");
 const systemController = require("./routers/systemRoutes");
+const userRoutes = require("./routers/userRoutes");
+const authRoutes = require("./routers/authRouters");
 const errorHandler = require("./middlewares/errorHandler");
 
 dotenv.config();
 
 const app = express();
+
 app.use(express.json());
 
 app.use(morgan("dev"));
@@ -24,10 +28,13 @@ app.use(
 app.use(cors());
 
 // Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/systems", systemController);
 app.use("/api/devices", deviceRoutes);
 app.use("/api/models", modelRoutes);
+app.use("/api/videos", videoRouters);
 app.use("/api/documents", technicalDocumentRoutes);
+app.use("/api/users", userRoutes);
 
 // Phục vụ file tĩnh từ thư mục storage
 app.use("/storage", express.static("storage"));

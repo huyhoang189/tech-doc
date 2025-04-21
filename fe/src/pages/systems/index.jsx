@@ -16,9 +16,10 @@ import {
   createSystem,
   updateSystem,
   deleteSystem,
-} from "../services/systemService";
+} from "../../services/systemService";
+import RoleButton from "../../components/RoleButton";
 
-const HomePage = () => {
+const SystemPage = () => {
   const [systems, setSystems] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSystem, setSelectedSystem] = useState(null);
@@ -81,9 +82,8 @@ const HomePage = () => {
     {
       title: "ID",
       dataIndex: "id",
-      key: "id",
-      align: "center",
       width: 50,
+      align: "center",
     },
     {
       title: "Mô tả",
@@ -108,22 +108,25 @@ const HomePage = () => {
       width: 100,
       render: (_, record) => (
         <Space>
-          <Button type="primary" onClick={() => handleEditSystem(record)}>
+          <RoleButton type="update" onClick={() => handleEditSystem(record)}>
             Sửa
-          </Button>
+          </RoleButton>
+
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa hệ thống này? Tất cả thiết bị liên quan cũng sẽ bị xóa."
             onConfirm={() => handleDeleteSystem(record.id)}
             okText="Có"
             cancelText="Không"
           >
-            <Button type="primary" danger>
-              Xóa
-            </Button>
+            <RoleButton type="delete">Xóa</RoleButton>
           </Popconfirm>
-          <Button type="default" onClick={() => navigate(`/${record.id}`)}>
+
+          <RoleButton
+            type="detail"
+            onClick={() => navigate(`/systems/${record.id}`)}
+          >
             Chi tiết
-          </Button>
+          </RoleButton>
         </Space>
       ),
     },
@@ -132,21 +135,18 @@ const HomePage = () => {
   return (
     <div
       style={{
-        padding: "20px",
-        backgroundColor: "#f0f2f5",
-        minHeight: "100vh",
+        backgroundColor: "#f1f1f1",
       }}
     >
       <Card
         title="Danh sách hệ thống"
         extra={
-          <Button type="primary" onClick={handleAddSystem}>
+          <RoleButton type="create" onClick={handleAddSystem}>
             Thêm hệ thống
-          </Button>
+          </RoleButton>
         }
         style={{
           borderRadius: "8px",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
         }}
       >
         <Table
@@ -188,4 +188,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default SystemPage;

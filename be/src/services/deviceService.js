@@ -8,6 +8,7 @@ const getDevices = async (systemId) => {
       include: {
         documents: true,
         models: true,
+        videos: true,
       },
     });
   } catch (error) {
@@ -22,6 +23,7 @@ const getDeviceById = async (id) => {
       include: {
         documents: true,
         models: true,
+        videos: true,
       },
     });
   } catch (error) {

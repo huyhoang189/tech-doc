@@ -15,6 +15,6 @@ router.post(
   technicalDocumentController.createDocument
 );
 router.delete("/:id", technicalDocumentController.deleteDocument);
-router.get("/:id/download", technicalDocumentController.downloadDocument); // Route tải file
+router.get("/:id/view", technicalDocumentController.displayDocument); // Route tải file
 
 module.exports = router;
