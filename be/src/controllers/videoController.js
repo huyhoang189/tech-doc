@@ -37,6 +37,18 @@ const createVideo = async (req, res, next) => {
  */
 const deleteVideo = async (req, res, next) => {
   try {
+    const video = await videoService.getVideoById(req.params.id);
+
+    if (!video) {
+      return res.status(404).json({ message: "Video khong ton tai" });
+    }
+
+    // Xóa file vật lý
+    const filePath = path.join(__dirname, "../..", video.path);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
     await videoService.deleteVideo(req.params.id);
     res.status(204).send(); // Không có nội dung
   } catch (error) {

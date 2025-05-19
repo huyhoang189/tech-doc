@@ -15,6 +15,7 @@ const DeviceDocumentDrawer = ({
     title={`Tài liệu kỹ thuật - ${deviceName}`}
     open={open}
     onClose={onClose}
+    width={500}
   >
     <List
       dataSource={documents}

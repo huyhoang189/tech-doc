@@ -40,6 +40,17 @@ const createModel = async (req, res, next) => {
  */
 const deleteModel = async (req, res, next) => {
   try {
+    const model = await model3dService.getModelById(req.params.id);
+
+    if (!model) {
+      return res.status(404).json({ message: "Model khong ton tai" });
+    }
+
+    // Xóa file vật lý
+    const filePath = path.join(__dirname, "../..", model.path);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
     await model3dService.deleteModel(req.params.id);
     res.status(204).send();
   } catch (error) {

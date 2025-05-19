@@ -29,7 +29,24 @@ const createDocument = async (req, res, next) => {
 
 const deleteDocument = async (req, res, next) => {
   try {
+    // Lấy thông tin document trước khi xóa
+    const document = await technicalDocumentService.getDocumentById(
+      req.params.id
+    );
+
+    if (!document) {
+      return res.status(404).json({ message: "Tài liệu không tồn tại" });
+    }
+
+    // Xóa file vật lý
+    const filePath = path.join(__dirname, "../..", document.path);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Xóa bản ghi trong database
     await technicalDocumentService.deleteDocument(req.params.id);
+
     res.status(204).send();
   } catch (error) {
     next(error);

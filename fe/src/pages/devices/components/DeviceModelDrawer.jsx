@@ -10,7 +10,12 @@ const DeviceModelDrawer = ({
   onDelete,
   onUpload,
 }) => (
-  <Drawer title={`Mô hình 3D - ${deviceName}`} open={open} onClose={onClose}>
+  <Drawer
+    title={`Mô hình 3D - ${deviceName}`}
+    open={open}
+    onClose={onClose}
+    width={500}
+  >
     <List
       dataSource={models}
       renderItem={(model) => (

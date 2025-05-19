@@ -13,6 +13,7 @@ const DeviceTable = ({
   onDownloadVid,
   onPreviewModel,
   onPreviewVideo,
+  onPreviewWebModel,
 }) => {
   const columns = [
     {
@@ -40,6 +41,10 @@ const DeviceTable = ({
               {m.path.split("/").pop()}
             </a>
           ))}
+
+          <Button style={{ maxWidth: 150 }} onClick={() => onPreviewWebModel()}>
+            Xem tất cả
+          </Button>
         </Flex>
       ),
     },
@@ -77,6 +82,7 @@ const DeviceTable = ({
       title: "Hành động",
       key: "actions",
       align: "center",
+      width: "200px",
       render: (_, record) => (
         <Flex vertical gap={10}>
           <Flex gap={10} justify="center">

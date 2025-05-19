@@ -28,6 +28,7 @@ import DeviceTable from "./components/DeviceTable";
 import ModelViewerModal from "./components/ModelViewerModal";
 import VideoPlayerModal from "./components/VideoPlayerModal";
 import RoleButton from "../../components/RoleButton";
+import ModelWebModal from "./components/ModelWebModal";
 
 const DevicePage = () => {
   const { systemId } = useParams();
@@ -46,6 +47,8 @@ const DevicePage = () => {
 
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
+
+  const [isModelWebModalOpen, setIsModelWebModalOpen] = useState(false);
 
   const [deviceForm] = Form.useForm();
 
@@ -213,11 +216,13 @@ const DevicePage = () => {
             setCurrentVideoUrl(`http://localhost:3000${url}`);
             setIsVideoModalOpen(true);
           }}
+          onPreviewWebModel={() => {
+            setIsModelWebModalOpen(true);
+          }}
         />
       </Card>
 
       <DeviceFormModal
-        systemId={systemId}
         open={isDeviceModalVisible}
         onOk={handleDeviceOk}
         onCancel={() => setIsDeviceModalVisible(false)}
@@ -264,6 +269,11 @@ const DevicePage = () => {
         open={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
         videoUrl={currentVideoUrl}
+      />
+
+      <ModelWebModal
+        open={isModelWebModalOpen}
+        onClose={() => setIsModelWebModalOpen()}
       />
     </div>
   );

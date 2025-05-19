@@ -11,7 +11,12 @@ const DeviceVideoDrawer = ({
   onDownload,
   onUpload,
 }) => (
-  <Drawer title={`Video - ${deviceName}`} open={open} onClose={onClose}>
+  <Drawer
+    title={`Video - ${deviceName}`}
+    open={open}
+    onClose={onClose}
+    width={500}
+  >
     <List
       dataSource={videos}
       renderItem={(video) => (
