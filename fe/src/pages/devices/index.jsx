@@ -217,6 +217,7 @@ const DevicePage = () => {
       </Card>
 
       <DeviceFormModal
+        systemId={systemId}
         open={isDeviceModalVisible}
         onOk={handleDeviceOk}
         onCancel={() => setIsDeviceModalVisible(false)}

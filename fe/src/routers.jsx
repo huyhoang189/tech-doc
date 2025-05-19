@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
         element: <SystemPage />,
       },
       {
-        path: "systems/:id",
+        path: "systems/:systemId",
         element: <DevicePage />,
       },
       {
